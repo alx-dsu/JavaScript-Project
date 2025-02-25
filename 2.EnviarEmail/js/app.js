@@ -1,12 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
   const email = {
     email: "",
+    cc_email: "",
     asunto: "",
     mensaje: "",
   };
 
   //Seleccionar elementos de interfaz
   const inputEmail = document.querySelector("#email");
+  const inputCCEmail = document.querySelector("#cc_email");
   const inputAsunto = document.querySelector("#asunto");
   const inputMensaje = document.querySelector("#mensaje");
   const formulario = document.querySelector("#formulario");
@@ -16,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   //Asignar eventos
   inputEmail.addEventListener("input", validar);
+  inputCCEmail.addEventListener("input", validar);
   inputAsunto.addEventListener("input", validar);
   inputMensaje.addEventListener("input", validar);
 
@@ -61,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function validar(e) {
-    if (e.target.value.trim() === "") {
+    if (e.target.value.trim() === "" && e.target.id !== "cc_email") {
       mostrarAlerta(
         `El campo ${e.target.id} es obligatorio`,
         e.target.parentElement
@@ -71,14 +74,22 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    if (e.target.id === "email" && !validarEmail(e.target.value)) {
-      mostrarAlerta(
-        `Debe ser un ${e.target.id} válido`,
-        e.target.parentElement
-      );
-      email[e.target.name] = "";
-      comprobarEmail();
-      return;
+    if (
+      (e.target.id === "email" || e.target.id === "cc_email") &&
+      e.target.value.trim() !== ""
+    ) {
+      if (
+        (e.target.id === "email" || e.target.id === "cc_email") &&
+        !validarEmail(e.target.value)
+      ) {
+        mostrarAlerta(
+          `Debe ser un ${e.target.id} válido`,
+          e.target.parentElement
+        );
+        email[e.target.name] = "";
+        comprobarEmail();
+        return;
+      }
     }
 
     limpiarAlerta(e.target.parentElement);
@@ -112,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function resetForm() {
     // Reiniciar el objeto
     email.email = "";
+    email.cc_email = "";
     email.asunto = "";
     email.mensaje = "";
 
@@ -126,6 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function comprobarEmail() {
+    // console.log("No se");
     if (Object.values(email).includes("")) {
       btnSubmit.classList.add("opacity-50");
       btnSubmit.disabled = true;
