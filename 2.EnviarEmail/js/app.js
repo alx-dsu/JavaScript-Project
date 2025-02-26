@@ -134,25 +134,21 @@ document.addEventListener("DOMContentLoaded", function () {
   function validarEmail(email) {
     const regex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
     const resultado = regex.test(email);
+    console.log(resultado);
     return resultado;
   }
 
   function comprobarEmail() {
-    // Validar que los campos requeridos no estén vacíos
-    if (email.email === "" || email.asunto === "" || email.mensaje === "") {
+    if (email.cc_email === "") {
+      delete email.cc_email;
+    }
+
+    if (Object.values(email).includes("")) {
       btnSubmit.classList.add("opacity-50");
       btnSubmit.disabled = true;
       return;
     }
 
-    // Si el usuario escribió algo en cc_email, debe ser válido
-    if (email.cc_email !== "" && !validarEmail(email.cc_email)) {
-      btnSubmit.classList.add("opacity-50");
-      btnSubmit.disabled = true;
-      return;
-    }
-
-    // Si todo está correcto, habilitar el botón
     btnSubmit.classList.remove("opacity-50");
     btnSubmit.disabled = false;
   }
